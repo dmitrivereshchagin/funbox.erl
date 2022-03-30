@@ -1,0 +1,20 @@
+services:
+  workspace:
+    build:
+      context: .
+      args:
+        - WORKSPACE_UID=${WORKSPACE_UID:-1000}
+        - WORKSPACE_GID=${WORKSPACE_GID:-1000}
+    command: sleep infinity
+    environment:
+      ERL_AFLAGS: >-
+        +pc unicode
+        -kernel shell_history enabled
+        -kernel shell_history_path \"/workspace/.cache/erlang-history\"
+      REBAR_CACHE_DIR: /workspace/.cache/rebar3
+    init: true
+    volumes:
+      - .:/workspace:Z
+    working_dir: /workspace
+  redis:
+    image: redis:6.2-alpine
