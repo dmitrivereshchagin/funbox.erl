@@ -61,10 +61,9 @@ loop(State) ->
 
 -spec push_number(state()) -> {ok, binary()} | {error, term()}.
 push_number(State) ->
-    Client = State#state.redis_client,
-    QueueKey = State#state.queue_key,
-    N = funbox_number:random(2, State#state.max_number),
-    eredis:q(Client, ["LPUSH", QueueKey, N]).
+    Number = funbox_number:random(2, State#state.max_number),
+    Command = ["LPUSH", State#state.queue_key, Number],
+    eredis:q(State#state.redis_client, Command).
 
 -spec maybe_sleep(integer()) -> ok.
 maybe_sleep(Time) when Time > 0 ->
