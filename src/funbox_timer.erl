@@ -2,6 +2,7 @@
 
 %% API
 -export([sleep/1]).
+-export([seconds/1]).
 
 %%%===================================================================
 %%% Types
@@ -21,6 +22,12 @@ sleep(Time) when is_integer(Time), Time >= 2000 ->
     sleep(Time - ElapsedTime, monotonic_time());
 sleep(Time) when is_integer(Time), Time >= 0 ->
     sleep(Time, monotonic_time()).
+
+-spec seconds(Seconds) -> MicroSeconds when
+      Seconds :: non_neg_integer(),
+      MicroSeconds :: non_neg_integer().
+seconds(Seconds) ->
+    1000 * 1000 * Seconds.
 
 %%%===================================================================
 %%% Internal functions

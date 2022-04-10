@@ -36,7 +36,8 @@ init(Config) ->
         {ok, Client} ->
             MaxNumber = funbox_config:max_number(Config),
             QueueKey  = funbox_config:queue_key(Config),
-            TickTime  = 1000 * 1000 div funbox_config:producer_rate(Config),
+            Rate      = funbox_config:producer_rate(Config),
+            TickTime  = funbox_timer:seconds(1) div Rate,
             loop(#state{max_number   = MaxNumber,
                         queue_key    = QueueKey,
                         tick_time    = TickTime,
