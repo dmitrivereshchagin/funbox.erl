@@ -5,17 +5,10 @@
 -export([seconds/1]).
 
 %%%===================================================================
-%%% Types
-%%%===================================================================
-
--type time() :: non_neg_integer().
--export_type([time/0]).
-
-%%%===================================================================
 %%% API
 %%%===================================================================
 
--spec sleep(time()) -> ok.
+-spec sleep(non_neg_integer()) -> ok.
 sleep(Time) when is_integer(Time), Time >= 2000 ->
     {ElapsedTime, _} =
         timer:tc(timer, sleep, [Time div 1000 - 1]),
@@ -33,7 +26,7 @@ seconds(Seconds) ->
 %%% Internal functions
 %%%===================================================================
 
--spec sleep(time(), integer()) -> ok.
+-spec sleep(non_neg_integer(), integer()) -> ok.
 sleep(Time, Start) ->
     case monotonic_time() of
         Now when Now - Start < Time ->
