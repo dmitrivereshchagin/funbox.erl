@@ -62,6 +62,7 @@ result_set_key(#{result_set_key := ResultSetKey}) ->
 producer_rate(#{producer_rate := ProducerRate}) ->
     ProducerRate.
 
+-spec num_filterers(config()) -> pos_integer().
 num_filterers(#{num_filterers := NumFilterers}) ->
     NumFilterers.
 
