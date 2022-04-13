@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        otp-vsn: ['23', '24']
-    container: erlang:${{ matrix.otp-vsn }}-alpine
+        otp-version: ['23', '24']
+    container: erlang:${{ matrix.otp-version }}-alpine
     services:
       redis:
         image: redis:6.2-alpine

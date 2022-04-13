@@ -9,6 +9,9 @@ REBAR3 := $(exec-workspace) rebar3
 .PHONY: all
 all: workspace-up shell
 
+.PHONY: workspace-build
+workspace-build: ; $(COMPOSE) build
+
 .PHONY: workspace-up
 workspace-up: ; $(COMPOSE) up --detach
 
