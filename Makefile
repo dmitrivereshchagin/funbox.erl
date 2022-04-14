@@ -1,8 +1,9 @@
 COMPOSE := docker-compose
 
-exec           = $(COMPOSE) exec $(1)
-exec-workspace = $(call exec,workspace)
-exec-redis     = $(call exec,redis)
+exec = $(COMPOSE) exec $(1)
+
+exec-workspace := $(call exec,workspace)
+exec-redis     := $(call exec,redis)
 
 REBAR3 := $(exec-workspace) rebar3
 
