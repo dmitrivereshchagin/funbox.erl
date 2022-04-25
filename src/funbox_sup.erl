@@ -7,15 +7,13 @@
 %% Supervisor callbacks
 -export([init/1]).
 
--define(SERVER, ?MODULE).
-
 %%%===================================================================
 %%% API
 %%%===================================================================
 
 -spec start_link(funbox_config:config()) -> {ok, pid()}.
 start_link(Config) ->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, Config).
+    supervisor:start_link(?MODULE, Config).
 
 %%%===================================================================
 %%% Supervisor callbacks
