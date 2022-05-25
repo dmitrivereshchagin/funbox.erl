@@ -22,7 +22,8 @@
 
 -spec start_link(funbox_config:config()) -> {ok, pid()}.
 start_link(Config) ->
-    {ok, proc_lib:spawn_link(?MODULE, init, [Config])}.
+    Pid = proc_lib:spawn_link(?MODULE, init, [Config]),
+    {ok, Pid}.
 
 %%%===================================================================
 %%% proc_lib callbacks
@@ -53,21 +54,24 @@ init(Config) ->
 -spec loop(state()) -> no_return().
 loop(State) ->
     case timer:tc(fun push_number/1, [State]) of
-        {ElapsedTime, {ok, _}} ->
+        {ElapsedTime, ok} ->
             maybe_sleep(State#state.tick_time - ElapsedTime),
             loop(State);
         {_ElapsedTime, {error, Reason}} ->
             exit(Reason)
     end.
 
--spec push_number(state()) -> {ok, binary()} | {error, term()}.
+-spec push_number(state()) -> ok | {error, term()}.
 push_number(State) ->
     Number = funbox_number:random(2, State#state.max_number),
     Command = ["LPUSH", State#state.queue_key, Number],
-    eredis:q(State#state.redis_client, Command).
+    novalue(eredis:q(State#state.redis_client, Command)).
+
+novalue({ok, _}) -> ok;
+novalue({error, _} = Error) -> Error.
 
 -spec maybe_sleep(integer()) -> ok.
-maybe_sleep(Time) when Time > 0 ->
-    funbox_timer:sleep(Time);
-maybe_sleep(_Time) ->
-    ok.
+maybe_sleep(Time) when Time =< 0 ->
+    ok;
+maybe_sleep(Time) ->
+    funbox_timer:sleep(Time).

@@ -10,8 +10,7 @@
 
 -spec sleep(non_neg_integer()) -> ok.
 sleep(Time) when is_integer(Time), Time >= 2000 ->
-    {ElapsedTime, _} =
-        timer:tc(timer, sleep, [Time div 1000 - 1]),
+    {ElapsedTime, _} = timer:tc(timer, sleep, [Time div 1000 - 1]),
     sleep(Time - ElapsedTime, monotonic_time());
 sleep(Time) when is_integer(Time), Time >= 0 ->
     sleep(Time, monotonic_time()).

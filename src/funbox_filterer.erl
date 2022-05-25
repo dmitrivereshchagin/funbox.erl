@@ -69,13 +69,13 @@ handle_continue({convert_value, Value}, State) ->
         {ok, Number} ->
             {noreply, State, {continue, {check_primality, Number}}};
         error ->
-            ?LOG_WARNING("got bad value: ~tp", [Value]),
+            ?LOG_WARNING("Bad value: ~tp", [Value]),
             {noreply, State, {continue, poll_queue}}
     end;
 handle_continue({check_primality, Number}, State) ->
     case funbox_number:is_prime(Number) of
         true ->
-            ?LOG_INFO("got prime number: ~w", [Number]),
+            ?LOG_INFO("Prime number: ~w", [Number]),
             {noreply, State, {continue, {save_prime, Number}}};
         false ->
             {noreply, State, {continue, poll_queue}}
@@ -101,11 +101,11 @@ handle_cast(_Request, State) ->
           {noreply, state()} |
           {noreply, state(), {continue, continue()}} |
           {stop, term(), state()}.
-handle_info({response, {ok, [Key, Value]}}, State)
-  when Key =:= State#state.queue_key ->
+handle_info({response, {ok, [Key, Value]}},
+            #state{queue_key = Key} = State) ->
     {noreply, State, {continue, {convert_value, Value}}};
 handle_info({response, {error, Reason}}, State) ->
     {stop, Reason, State};
 handle_info(Info, State) ->
-    ?LOG_WARNING("unhandled info: ~tp", [Info]),
+    ?LOG_WARNING("Unhandled info: ~tp", [Info]),
     {noreply, State}.

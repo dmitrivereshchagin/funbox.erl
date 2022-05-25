@@ -24,7 +24,7 @@ start_link(Config) ->
 init(Config) ->
     NumFilterers = funbox_config:num_filterers(Config),
     ChildSpecs =
-        [#{id => {filterer, N},
+        [#{id    => {filterer, N},
            start => {funbox_filterer, start_link, [Config]}} ||
             N <- lists:seq(1, NumFilterers)],
     {ok, {#{strategy => one_for_one}, ChildSpecs}}.

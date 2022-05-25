@@ -10,14 +10,14 @@ REBAR3 := $(exec-workspace) rebar3
 .PHONY: all
 all: workspace-up shell
 
-.PHONY: workspace-build
-workspace-build: ; $(COMPOSE) build
+.PHONY: workspace-build wb
+workspace-build wb: ; $(COMPOSE) build
 
-.PHONY: workspace-up
-workspace-up: ; $(COMPOSE) up --detach
+.PHONY: workspace-up wu
+workspace-up wu: ; $(COMPOSE) up --detach
 
-.PHONY: workspace-down
-workspace-down: ; $(COMPOSE) down
+.PHONY: workspace-down wd
+workspace-down wd: ; $(COMPOSE) down
 
 .PHONY: workspace w
 workspace w: ; $(exec-workspace) sh
@@ -34,5 +34,5 @@ test t:
 	$(REBAR3) ct --cover
 	$(REBAR3) cover --verbose
 
-.PHONY: redis-cli r
-redis-cli r: ; $(exec-redis) redis-cli
+.PHONY: redis-cli rc
+redis-cli rc: ; $(exec-redis) redis-cli
