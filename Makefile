@@ -25,6 +25,9 @@ workspace w: ; $(exec-workspace) sh
 .PHONY: shell s
 shell s: ; $(REBAR3) shell
 
+.PHONY: xref x
+xref x: ; $(REBAR3) xref
+
 .PHONY: dialyzer d
 dialyzer d: ; $(REBAR3) dialyzer
 

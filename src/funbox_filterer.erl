@@ -5,6 +5,7 @@
 
 %% API
 -export([start_link/1]).
+-ignore_xref([start_link/1]).
 
 %% gen_server callbacks
 -export([init/1, handle_continue/2, handle_call/3,

@@ -2,9 +2,11 @@
 
 %% API
 -export([start_link/1]).
+-ignore_xref([start_link/1]).
 
 %% proc_lib callbacks
 -export([init/1]).
+-ignore_xref([init/1]).
 
 %%%===================================================================
 %%% Types
