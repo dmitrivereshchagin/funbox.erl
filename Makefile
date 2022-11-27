@@ -42,10 +42,7 @@ xref x: ; $(REBAR3) xref
 dialyzer d: ; $(REBAR3) dialyzer
 
 .PHONY: test t
-test t:
-	$(REBAR3) eunit --cover
-	$(REBAR3) ct --cover
-	$(REBAR3) cover --verbose
+test t: ; $(REBAR3) test
 
 # --------------------------------------------------------------------
 # Redis

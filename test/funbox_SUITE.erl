@@ -15,6 +15,7 @@ all() ->
      producer_pushes_to_queue].
 
 init_per_suite(Config) ->
+    _  = application:unload(funbox),
     ok = application:load(funbox),
     [{funbox_config, funbox_config:from_env()} | Config].
 

@@ -17,6 +17,4 @@ jobs:
       - uses: actions/checkout@v2
       - run: rebar3 xref
       - run: rebar3 dialyzer
-      - run: rebar3 eunit --cover
-      - run: rebar3 ct --cover
-      - run: rebar3 cover --verbose
+      - run: rebar3 test
