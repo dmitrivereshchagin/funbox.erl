@@ -42,7 +42,7 @@ init(Config) ->
             PushRate  = funbox_config:producer_rate(Config),
             loop(#state{max_number    = MaxNumber,
                         queue_key     = QueueKey,
-                        push_interval = funbox_timer:seconds(1) div PushRate,
+                        push_interval = funbox_utimer:seconds(1) div PushRate,
                         redis_client  = Client});
         {error, Reason} ->
             exit(Reason)
@@ -70,4 +70,4 @@ push_number(State) ->
 
 -spec maybe_sleep(integer()) -> ok.
 maybe_sleep(Time) when Time =< 0 -> ok;
-maybe_sleep(Time) -> funbox_timer:sleep(Time).
+maybe_sleep(Time) -> funbox_utimer:sleep(Time).

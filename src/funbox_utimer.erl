@@ -1,4 +1,4 @@
--module(funbox_timer).
+-module(funbox_utimer).
 
 %% API
 -export([sleep/1]).
