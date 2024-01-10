@@ -12,10 +12,10 @@
 %%% Types
 %%%===================================================================
 
--record(state, {max_number   :: pos_integer(),
-                queue_key    :: binary(),
-                tick_time    :: pos_integer(),
-                redis_client :: pid()}).
+-record(state, {max_number    :: pos_integer(),
+                queue_key     :: binary(),
+                push_interval :: pos_integer(),
+                redis_client  :: pid()}).
 -type state() :: #state{}.
 
 %%%===================================================================
@@ -39,12 +39,11 @@ init(Config) ->
         {ok, Client} ->
             MaxNumber = funbox_config:max_number(Config),
             QueueKey  = funbox_config:queue_key(Config),
-            Rate      = funbox_config:producer_rate(Config),
-            TickTime  = funbox_timer:seconds(1) div Rate,
-            loop(#state{max_number   = MaxNumber,
-                        queue_key    = QueueKey,
-                        tick_time    = TickTime,
-                        redis_client = Client});
+            PushRate  = funbox_config:producer_rate(Config),
+            loop(#state{max_number    = MaxNumber,
+                        queue_key     = QueueKey,
+                        push_interval = funbox_timer:seconds(1) div PushRate,
+                        redis_client  = Client});
         {error, Reason} ->
             exit(Reason)
     end.
@@ -56,8 +55,8 @@ init(Config) ->
 -spec loop(state()) -> no_return().
 loop(State) ->
     case timer:tc(fun push_number/1, [State]) of
-        {ElapsedTime, ok} ->
-            maybe_sleep(State#state.tick_time - ElapsedTime),
+        {ElapsedTime, {ok, _}} ->
+            maybe_sleep(State#state.push_interval - ElapsedTime),
             loop(State);
         {_ElapsedTime, {error, Reason}} ->
             exit(Reason)
@@ -67,10 +66,7 @@ loop(State) ->
 push_number(State) ->
     Number = funbox_number:random(2, State#state.max_number),
     Command = ["LPUSH", State#state.queue_key, Number],
-    novalue(eredis:q(State#state.redis_client, Command)).
-
-novalue({ok, _}) -> ok;
-novalue({error, _} = Error) -> Error.
+    eredis:q(State#state.redis_client, Command).
 
 -spec maybe_sleep(integer()) -> ok.
 maybe_sleep(Time) when Time =< 0 -> ok;
