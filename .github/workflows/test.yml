@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        otp-version: ['23', '24', '25']
+        otp-version: ['24', '25', '26']
     container: erlang:${{ matrix.otp-version }}-alpine
     services:
       redis:
-        image: redis:6.2-alpine
+        image: redis:7.2-alpine
     steps:
       - uses: actions/checkout@v2
       - run: rebar3 xref

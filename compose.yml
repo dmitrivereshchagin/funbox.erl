@@ -4,7 +4,7 @@ services:
     build:
       context: .
       args:
-        - WORKSPACE_OTP_VERSION=${WORKSPACE_OTP_VERSION:-25.0}
+        - WORKSPACE_OTP_VERSION=${WORKSPACE_OTP_VERSION:-26.2}
         - WORKSPACE_UID=${WORKSPACE_UID:-1000}
         - WORKSPACE_GID=${WORKSPACE_GID:-1000}
     command: sleep infinity
@@ -19,4 +19,4 @@ services:
       - .:/workspace:Z
     working_dir: /workspace
   redis:
-    image: redis:6.2-alpine
+    image: redis:7.2-alpine
