@@ -12,7 +12,7 @@ services:
       ERL_AFLAGS: >-
         +pc unicode
         -kernel shell_history enabled
-        -kernel shell_history_path \"/workspace/.cache/erlang-history\"
+        -kernel shell_history_path '"/workspace/.cache/erlang-history"'
       REBAR_CACHE_DIR: /workspace/.cache/rebar3
     init: true
     volumes:

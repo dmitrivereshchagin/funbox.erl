@@ -31,9 +31,6 @@ random(From, To) when is_integer(From), is_integer(To), From =< To ->
 %%% Internal functions
 %%%===================================================================
 
-is_prime(_, M, M) ->
-    true;
-is_prime(N, I, _) when N rem I =:= 0 ->
-    false;
-is_prime(N, I, M) ->
-    is_prime(N, I + 1, M).
+is_prime(_, M, M) -> true;
+is_prime(N, I, _) when N rem I =:= 0 -> false;
+is_prime(N, I, M) -> is_prime(N, I + 1, M).

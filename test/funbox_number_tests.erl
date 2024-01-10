@@ -12,8 +12,8 @@ from_binary_test_() ->
      ?_assertEqual(error, funbox_number:from_binary(<<"x">>))].
 
 is_prime_test_() ->
-    [?_test(?assertEqual(R, funbox_number:is_prime(N), T)) ||
-        {N, R} = T <- [{-1, false},
+    [?_test(?assertEqual(R, funbox_number:is_prime(N), T))
+     || {N, R} = T <- [{-1, false},
                        {0, false},
                        {1, false},
                        {2, true},
@@ -24,16 +24,16 @@ is_prime_test_() ->
 
 primes_test_() ->
     %% https://en.wikipedia.org/wiki/List_of_prime_numbers
-    [?_test(?assert(funbox_number:is_prime(N), {number, N})) ||
-        N <- [31636373, 39916801, 193877777, 433494437, 479001599,
+    [?_test(?assert(funbox_number:is_prime(N), {number, N}))
+     || N <- [31636373, 39916801, 193877777, 433494437, 479001599,
               2971215073, 8589935681, 8589935681, 16148168401,
               16148168401, 22815088913, 77777677777, 87178291199,
               99999199999, 200560490131, 228204732751]].
 
 pseudoprimes_test_() ->
     %% https://en.wikipedia.org/wiki/Pseudoprime
-    [?_test(?assertNot(funbox_number:is_prime(N), {number, N})) ||
-        N <- [7957, 8321, 8481, 8911, 272611, 283361, 302101, 303101,
+    [?_test(?assertNot(funbox_number:is_prime(N), {number, N}))
+     || N <- [7957, 8321, 8481, 8911, 272611, 283361, 302101, 303101,
               12327121, 443372888629441]].
 
 random_test_() ->

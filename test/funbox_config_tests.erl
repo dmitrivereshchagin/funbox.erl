@@ -17,8 +17,8 @@ with_loaded_application_test_() ->
     {foreach,
      fun load_application/0,
      fun unload_application/1,
-     [{with, [T]} ||
-         T <- [fun default_max_number/1,
+     [{with, [T]}
+      || T <- [fun default_max_number/1,
                fun custom_max_number/1,
                fun default_redis_host/1,
                fun custom_redis_host/1,
@@ -40,7 +40,7 @@ with_loaded_application_test_() ->
 %%%===================================================================
 
 default_max_number(_Application) ->
-    ?assertEqual(1000000000, max_number()).
+    ?assertEqual(1_000_000_000, max_number()).
 
 custom_max_number(Application) ->
     application:set_env(Application, max_number, 1000),

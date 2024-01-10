@@ -73,7 +73,5 @@ novalue({ok, _}) -> ok;
 novalue({error, _} = Error) -> Error.
 
 -spec maybe_sleep(integer()) -> ok.
-maybe_sleep(Time) when Time =< 0 ->
-    ok;
-maybe_sleep(Time) ->
-    funbox_timer:sleep(Time).
+maybe_sleep(Time) when Time =< 0 -> ok;
+maybe_sleep(Time) -> funbox_timer:sleep(Time).
