@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        otp-version: ['24', '25', '26']
+        otp-version: ['24', '25', '26', '27']
     container: erlang:${{ matrix.otp-version }}-alpine
     services:
       redis:
