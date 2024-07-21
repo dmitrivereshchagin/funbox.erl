@@ -2,3 +2,4 @@
 /.env
 /_build/
 /erl_crash.dump
+/rebar3.crashdump
