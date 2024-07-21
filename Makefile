@@ -44,6 +44,9 @@ dialyzer d: ; $(REBAR3) dialyzer
 .PHONY: test t
 test t: ; $(REBAR3) test
 
+.PHONY: clean c
+clean c: ; $(REBAR3) clean --all
+
 # --------------------------------------------------------------------
 # Redis
 # --------------------------------------------------------------------
