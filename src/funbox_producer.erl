@@ -62,7 +62,7 @@ loop(State) ->
             exit(Reason)
     end.
 
--spec push_number(state()) -> ok | {error, term()}.
+-spec push_number(state()) -> {ok, _} | {error, term()}.
 push_number(State) ->
     Number = funbox_number:random(2, State#state.max_number),
     Command = ["LPUSH", State#state.queue_key, Number],
