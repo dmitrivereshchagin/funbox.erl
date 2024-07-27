@@ -5,14 +5,16 @@
 -include_lib("common_test/include/ct.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
+-include("funbox_t.hrl").
+
 %%%===================================================================
 %%% Common Test callbacks
 %%%===================================================================
 
 all() ->
-    [filterer_polls_queue,
-     specified_number_of_filterers_are_started,
-     producer_pushes_to_queue].
+    [test_filterer_polls_queue,
+     test_specified_number_of_filterers_are_started,
+     test_producer_pushes_to_queue].
 
 init_per_suite(Config) ->
     _  = application:unload(funbox),
@@ -37,19 +39,18 @@ end_per_testcase(_TestCase, _Config) ->
 %%% Test cases
 %%%===================================================================
 
-filterer_polls_queue(Config) ->
+test_filterer_polls_queue(Config) ->
     FunboxConfig = ?config(funbox_config, Config),
     QueueKey = funbox_config:queue_key(FunboxConfig),
     ResultSetKey = funbox_config:result_set_key(FunboxConfig),
     {ok, _} = funbox_filterer:start_link(FunboxConfig),
     ?assertEqual(0, q(["SCARD", ResultSetKey])),
-    _ = q(["LPUSH", QueueKey, 1, 2, 4, 5, "x"]),
-    ct:sleep(500),
-    ?assertEqual(1, q(["SISMEMBER", ResultSetKey, 2])),
-    ?assertEqual(1, q(["SISMEMBER", ResultSetKey, 5])),
+    _ = q(["LPUSH", QueueKey, 1, 2, 4, "x", 5]),
+    ?WAIT_UNTIL(q(["SISMEMBER", ResultSetKey, 2]) =:= 1),
+    ?WAIT_UNTIL(q(["SISMEMBER", ResultSetKey, 5]) =:= 1),
     ?assertEqual(2, q(["SCARD", ResultSetKey])).
 
-specified_number_of_filterers_are_started(Config) ->
+test_specified_number_of_filterers_are_started(Config) ->
     FunboxConfig = ?config(funbox_config, Config),
     FunboxConfig1 = FunboxConfig#{num_filterers := 2},
     {ok, Pid1} = funbox_filterer_sup:start_link(FunboxConfig1),
@@ -60,7 +61,7 @@ specified_number_of_filterers_are_started(Config) ->
     Counts2 = supervisor:count_children(Pid2),
     ?assertEqual(4, proplists:get_value(active, Counts2)).
 
-producer_pushes_to_queue(Config) ->
+test_producer_pushes_to_queue(Config) ->
     FunboxConfig = ?config(funbox_config, Config),
     QueueKey = funbox_config:queue_key(FunboxConfig),
     ?assertEqual(0, q(["LLEN", QueueKey])),
