@@ -1,10 +1,7 @@
 -module(funbox_SUITE).
-
 -compile(export_all).
 
--include_lib("common_test/include/ct.hrl").
--include_lib("eunit/include/eunit.hrl").
-
+-include_lib("stdlib/include/assert.hrl").
 -include("funbox_t.hrl").
 
 %%%===================================================================
@@ -25,8 +22,8 @@ end_per_suite(_Config) ->
     ok = application:unload(funbox).
 
 init_per_testcase(_TestCase, Config) ->
-    FunboxConfig = ?config(funbox_config, Config),
-    RedisOptions = [{name, {local, redis}} |
+    FunboxConfig = proplists:get_value(funbox_config, Config),
+    RedisOptions = [{name, {local, ?MODULE}} |
                     funbox_config:redis_options(FunboxConfig)],
     {ok, _} = eredis:start_link(RedisOptions),
     Config.
@@ -40,7 +37,7 @@ end_per_testcase(_TestCase, _Config) ->
 %%%===================================================================
 
 test_filterer_polls_queue(Config) ->
-    FunboxConfig = ?config(funbox_config, Config),
+    FunboxConfig = proplists:get_value(funbox_config, Config),
     QueueKey = funbox_config:queue_key(FunboxConfig),
     ResultSetKey = funbox_config:result_set_key(FunboxConfig),
     {ok, _} = funbox_filterer:start_link(FunboxConfig),
@@ -51,7 +48,7 @@ test_filterer_polls_queue(Config) ->
     ?assertEqual(2, q(["SCARD", ResultSetKey])).
 
 test_specified_number_of_filterers_are_started(Config) ->
-    FunboxConfig = ?config(funbox_config, Config),
+    FunboxConfig = proplists:get_value(funbox_config, Config),
     FunboxConfig1 = FunboxConfig#{num_filterers := 2},
     {ok, Pid1} = funbox_filterer_sup:start_link(FunboxConfig1),
     Counts1 = supervisor:count_children(Pid1),
@@ -62,7 +59,7 @@ test_specified_number_of_filterers_are_started(Config) ->
     ?assertEqual(4, proplists:get_value(active, Counts2)).
 
 test_producer_pushes_to_queue(Config) ->
-    FunboxConfig = ?config(funbox_config, Config),
+    FunboxConfig = proplists:get_value(funbox_config, Config),
     QueueKey = funbox_config:queue_key(FunboxConfig),
     ?assertEqual(0, q(["LLEN", QueueKey])),
     {ok, Pid} = funbox_producer:start_link(FunboxConfig),
@@ -76,9 +73,9 @@ test_producer_pushes_to_queue(Config) ->
 %%%===================================================================
 
 q(Command) ->
-    case eredis:q(redis, Command) of
+    case eredis:q(?MODULE, Command) of
         {error, Reason} ->
-            error({redis, Reason}, [Command]);
+            error(Reason, [Command]);
         {ok, Value} ->
             maybe_integer(Value)
     end.

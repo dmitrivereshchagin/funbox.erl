@@ -6,7 +6,7 @@
 -define(WAIT_UNTIL(Expr, Opts),
         case funbox_t:wait_until(fun() -> (Expr) end, (Opts)) of
             timeout ->
-                erlang:error({wait_timeout, [{expression, (??Expr)}]});
+                erlang:error({wait_until, [{expression, (??Expr)}]});
             ok ->
                 ok
         end).
