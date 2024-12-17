@@ -7,9 +7,9 @@
 %%% Types
 %%%===================================================================
 
--type wait_until_option() :: {timeout, timeout()} |
-                             {delay, non_neg_integer()}.
--export_type([wait_until_option/0]).
+-type wait_option() :: {timeout, timeout()} |
+                       {delay, non_neg_integer()}.
+-export_type([wait_option/0]).
 
 %%%===================================================================
 %%% API
@@ -17,7 +17,7 @@
 
 -spec wait_until(Pred, Opts) -> ok | timeout when
       Pred :: fun(() -> boolean()),
-      Opts :: [wait_until_option()].
+      Opts :: [wait_option()].
 wait_until(Pred, Opts) ->
     Timeout = proplists:get_value(timeout, Opts, 5000),
     Deadline = monotonic_time() + Timeout,
