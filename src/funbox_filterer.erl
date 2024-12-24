@@ -30,7 +30,7 @@
 %%% API
 %%%===================================================================
 
--spec start_link(funbox_config:config()) -> {ok, pid()}.
+-spec start_link(funbox_config:config()) -> gen_server:start_ret().
 start_link(Config) ->
     gen_server:start_link(?MODULE, Config, []).
 
@@ -98,10 +98,12 @@ handle_call(_Request, _From, State) ->
 handle_cast(_Request, State) ->
     {noreply, State}.
 
--spec handle_info(term(), state()) ->
+-spec handle_info(Info, state()) ->
           {noreply, state()} |
           {noreply, state(), {continue, continue()}} |
-          {stop, term(), state()}.
+          {stop, term(), state()} when
+      Info :: {response, {ok, [binary()]}} |
+              {response, {error, term()}}.
 handle_info({response, {ok, [Key, Value]}},
             #state{queue_key = Key} = State) ->
     {noreply, State, {continue, {convert_value, Value}}};

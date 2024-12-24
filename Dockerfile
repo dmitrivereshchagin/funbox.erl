@@ -6,6 +6,7 @@ ARG WORKSPACE_GID
 
 RUN set -x \
     && addgroup -g "$WORKSPACE_GID" workspace \
-    && adduser -G workspace -D -u "$WORKSPACE_UID" workspace
+    && adduser -G workspace -D -u "$WORKSPACE_UID" workspace \
+    && apk add --no-cache git=2.45.2-r0
 
 USER workspace:workspace

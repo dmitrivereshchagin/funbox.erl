@@ -70,7 +70,7 @@ num_filterers(#{num_filterers := NumFilterers}) ->
 %%% Internal functions
 %%%===================================================================
 
--spec env(atom()) -> term().
+-spec env(atom()) -> eqwalizer:dynamic().
 env(Param) ->
     {ok, Value} = application:get_env(funbox, Param),
     Value.

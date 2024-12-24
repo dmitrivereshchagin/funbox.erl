@@ -1,6 +1,7 @@
 .NOTPARALLEL:
 
 COMPOSE := docker-compose
+ELP := elp
 
 exec = $(COMPOSE) exec $(1)
 
@@ -40,6 +41,9 @@ xref x: ; $(REBAR3) xref
 
 .PHONY: dialyzer d
 dialyzer d: ; $(REBAR3) dialyzer
+
+.PHONY: eqwalizer e
+eqwalizer e: ; $(ELP) eqwalize-all
 
 .PHONY: test t
 test t: ; $(REBAR3) test

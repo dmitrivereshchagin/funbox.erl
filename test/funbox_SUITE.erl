@@ -1,8 +1,8 @@
 -module(funbox_SUITE).
--compile(export_all).
+-compile([export_all, nowarn_export_all]).
 
 -include_lib("stdlib/include/assert.hrl").
--include("funbox_t.hrl").
+-include("./funbox_t.hrl").
 
 %%%===================================================================
 %%% Common Test callbacks
@@ -72,6 +72,7 @@ test_producer_pushes_to_queue(Config) ->
 %%% Helper functions
 %%%===================================================================
 
+%% elp:ignore W0008
 q(Command) ->
     case eredis:q(?MODULE, Command) of
         {error, Reason} ->
@@ -80,11 +81,13 @@ q(Command) ->
             maybe_integer(Value)
     end.
 
+%% elp:ignore W0008
 maybe_integer(Value) when is_binary(Value) ->
     maybe_integer_from_binary(Value);
 maybe_integer(Value) ->
     Value.
 
+%% elp:ignore W0008
 maybe_integer_from_binary(Binary) ->
     try
         binary_to_integer(Binary)
@@ -92,6 +95,7 @@ maybe_integer_from_binary(Binary) ->
         error:badarg -> Binary
     end.
 
+%% elp:ignore W0008
 await_killed(Pid) ->
     MonitorRef = monitor(process, Pid),
     unlink(Pid), exit(Pid, kill),

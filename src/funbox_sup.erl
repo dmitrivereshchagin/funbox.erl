@@ -11,7 +11,7 @@
 %%% API
 %%%===================================================================
 
--spec start_link(funbox_config:config()) -> {ok, pid()}.
+-spec start_link(funbox_config:config()) -> supervisor:startlink_ret().
 start_link(Config) ->
     supervisor:start_link(?MODULE, Config).
 
